@@ -1,84 +1,82 @@
 package com.divysoni.taskManager.services.impl;
 
-import com.divysoni.taskManager.entities.Task;
-import com.divysoni.taskManager.entities.TaskList;
-import com.divysoni.taskManager.entities.TaskPriority;
-import com.divysoni.taskManager.entities.TaskStatus;
-import com.divysoni.taskManager.repo.TaskListRepo;
-import com.divysoni.taskManager.repo.TaskRepo;
+import com.divysoni.taskManager.entities.taskManager.Task;
+import com.divysoni.taskManager.entities.taskManager.TaskList;
+import com.divysoni.taskManager.entities.taskManager.TaskPriority;
+import com.divysoni.taskManager.entities.taskManager.TaskStatus;
+import com.divysoni.taskManager.entities.users.User;
+import com.divysoni.taskManager.repo.taskManager.TaskListRepo;
+import com.divysoni.taskManager.repo.taskManager.TaskRepo;
 import com.divysoni.taskManager.services.TaskService;
-import jakarta.transaction.Transactional;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
-@Service
+@Component
 public class TaskServiceImpl implements TaskService {
 
     @Autowired
     private TaskRepo taskRepo;
 
     @Autowired
-    private TaskListRepo taskListRepo;
+    private TaskListServiceImpl taskListService;
 
     @Override
-    public List<Task> getTasks(UUID taskListId) {
-        return taskRepo.findByTaskListId(taskListId);
+    public List<Task> getTasks(ObjectId taskListId) {
+        TaskList taskList = taskListService.getTaskList(taskListId);
+        return Optional.ofNullable(taskList.getTasks())
+                .orElse(Collections.emptyList());
     }
+
 
     @Transactional
     @Override
-    public Task createTask(UUID taskListId, Task task) {
+    public Task createTask(ObjectId taskListId, Task task) {
         if(null != task.getId()) {
             throw new IllegalArgumentException("Task already has an Id!");
         }
-        if(null == task.getTitle()) {
+        if(null == task.getTitle() || task.getTitle().isBlank()) {
             throw new IllegalArgumentException("Task must have a title!");
         }
 
-        TaskPriority taskPriority = Optional.ofNullable(task.getPriority())
+        TaskPriority taskPriority = Optional.of(task.getPriority())
                 .orElse(TaskPriority.MEDIUM);
 
-        TaskStatus taskStatus = TaskStatus.OPEN;
-
-        TaskList taskList = taskListRepo.findById(taskListId)
-                .orElseThrow(()-> new IllegalArgumentException("Invalid TaskList Id provided!"));
+        TaskList taskList = taskListService.getTaskList(taskListId);
+        if(taskList == null) throw new IllegalArgumentException("TaskList doesn't exists, enter valid Id!");
 
         LocalDateTime nowTime = LocalDateTime.now();
-        Task taskToSave = new Task(
-                null,
-                task.getTitle(),
-                task.getDescription(),
-                task.getDueDate(),
-                taskStatus,
-                taskPriority,
-                taskList, // the taskList where we are adding the task
-                nowTime, //  created
-                nowTime // updated
-        );
+        task.setId(null);
+        task.setStatus(TaskStatus.OPEN);
+        task.setPriority(taskPriority);
+        task.setCreated(nowTime);
+        task.setUpdated(nowTime);
 
-        return taskRepo.save(taskToSave);
+        taskList.getTasks().add(task);
+        taskListService.saveTaskList(taskList);
+        return taskRepo.save(task);
     }
 
     @Override
-    public Optional<Task> getTaskById(UUID taskListId, UUID taskId) {
-        return taskRepo.findByTaskListIdAndId(taskListId, taskId);
+    public Task getTaskById(ObjectId taskListId, ObjectId taskId) {
+        TaskList tasksLists = taskListService.getTaskList(taskListId);
+        List<Task> collected = tasksLists.getTasks().stream().filter(tasks -> tasks.getId().equals(taskId)).toList();
+
+        if(collected.isEmpty()) throw new IllegalArgumentException("Invalid Task Id, Try again!");
+
+        return taskRepo.findById(taskId).orElseThrow(()-> new IllegalArgumentException("Invalid Task Id, Try again!"));
+
     }
 
-    @Transactional
     @Override
-    public Task updateTask(UUID taskListId, UUID taskId, Task newTask) {
-        if(null == newTask.getId()) {
-            throw new IllegalArgumentException("Task must have an Id!");
-        }
-        if(!Objects.equals(taskId, newTask.getId())) {
-            throw new IllegalArgumentException("Task IDs do not match!");
-        }
+    public Task updateTask(ObjectId taskListId, ObjectId taskId, Task newTask) {
         if(null == newTask.getPriority()) {
             throw new IllegalArgumentException("Task must have a valid priority!");
         }
@@ -86,23 +84,30 @@ public class TaskServiceImpl implements TaskService {
             throw new IllegalArgumentException("Task must have a valid status!");
         }
 
-        Task oldTask = taskRepo.findByTaskListIdAndId(taskListId, taskId)
-                .orElseThrow(()-> new IllegalArgumentException("Task Not found!"));
+        TaskList taskList = taskListService.getTaskList(taskListId);
+        List<Task> collected = taskList.getTasks().stream().filter(task-> task.getId().equals(taskId)).toList();
+        if(collected.isEmpty()) throw new IllegalArgumentException("Invalid Task Id!");
+        Task oldTask = taskRepo.findById(taskId).orElseThrow(()->new IllegalArgumentException("Invalid Task Id!"));
 
-        oldTask.setTitle(Objects.equals(newTask.getTitle(), null)? oldTask.getTitle() : newTask.getTitle());
-        oldTask.setDescription(Objects.equals(newTask.getDescription(), null)? oldTask.getDescription() : newTask.getDescription());
-        oldTask.setPriority(Objects.equals(newTask.getPriority(), null)? oldTask.getPriority() : newTask.getPriority());
-        oldTask.setStatus(Objects.equals(newTask.getStatus(), null)? oldTask.getStatus() : newTask.getStatus());
+        oldTask.setTitle(newTask.getTitle().isBlank()? oldTask.getTitle() : newTask.getTitle());
+        oldTask.setDescription(newTask.getDescription().isBlank()? oldTask.getDescription() : newTask.getDescription());
+        oldTask.setPriority(newTask.getPriority());
+        oldTask.setStatus(newTask.getStatus());
 
         return taskRepo.save(oldTask);
     }
 
-    /* because we made our own delete method which delete from both taskList and task database
-    * if one operation fails then database will be inconsistent
-    * that's why we use transactional so if something goes wrong then it can roll back*/
     @Transactional
     @Override
-    public void deleteTask(UUID taskListId, UUID taskId) {
-        taskRepo.deleteByTaskListIdAndId(taskListId, taskId);
+    public void deleteTask(ObjectId taskListId, ObjectId taskId) {
+        TaskList taskList = taskListService.getTaskList(taskListId);
+        List<Task> collected = taskList.getTasks().stream().filter(task->task.getId().equals(taskId)).toList();
+        if(collected.isEmpty()) throw new IllegalArgumentException("Invalid Task Id!");
+        Task task = taskRepo.findById(taskId).orElse(null);
+
+        taskList.getTasks().remove(task);
+        taskListService.saveTaskList(taskList); /// 1
+
+        taskRepo.deleteById(taskId); /// 2
     }
 }

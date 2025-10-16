@@ -1,9 +1,9 @@
 package com.divysoni.taskManager.dto;
 
-import com.divysoni.taskManager.entities.TaskPriority;
-import com.divysoni.taskManager.entities.TaskStatus;
+import com.divysoni.taskManager.entities.taskManager.TaskPriority;
+import com.divysoni.taskManager.entities.taskManager.TaskStatus;
+import org.bson.types.ObjectId;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 /* DTO(data transfer object): which is just used to transfer object/ presentation object
 * ex., from frontend to server etc...
@@ -14,10 +14,10 @@ import java.util.UUID;
  This makes records ideal for creating Plain Old Java Objects (POJOs) and Data Transfer Objects (DTOs) without the need to manually write repetitive code.*/
 public record TaskDto(
         // each of these variables are immutable
-        UUID id,
+        ObjectId id,
         String title,
         String description,
         LocalDateTime dueDate,
         TaskPriority priority,
         TaskStatus status
-){ }
+){}

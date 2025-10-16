@@ -1,14 +1,13 @@
 package com.divysoni.taskManager.dto;
 
+import org.bson.types.ObjectId;
 import java.util.List;
-import java.util.UUID;
 
 public record TaskListDto(
-        UUID id,
+        ObjectId id,
         String title,
         String description,
-        Integer count, // count of the task we have in the list
-        Double progress, // no.of tasks completed in the list
+        Integer count,
+        Double progress,
         List<TaskDto> tasks
-) {
-}
+) {}

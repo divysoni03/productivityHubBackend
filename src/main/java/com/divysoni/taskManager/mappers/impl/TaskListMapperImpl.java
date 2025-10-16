@@ -1,26 +1,22 @@
 package com.divysoni.taskManager.mappers.impl;
 
 import com.divysoni.taskManager.dto.TaskListDto;
-import com.divysoni.taskManager.entities.Task;
-import com.divysoni.taskManager.entities.TaskList;
-import com.divysoni.taskManager.entities.TaskStatus;
+import com.divysoni.taskManager.entities.taskManager.Task;
+import com.divysoni.taskManager.entities.taskManager.TaskList;
+import com.divysoni.taskManager.entities.taskManager.TaskStatus;
 import com.divysoni.taskManager.mappers.TaskListMapper;
 import com.divysoni.taskManager.mappers.TaskMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.swing.text.html.Option;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @Component
 public class TaskListMapperImpl implements TaskListMapper {
 
-    private final TaskMapper taskMapper;
-
-    public TaskListMapperImpl(TaskMapper taskMapper) {
-        this.taskMapper = taskMapper;
-    }
+    @Autowired
+    private TaskMapper taskMapper;
 
     @Override
     public TaskList fromDto(TaskListDto taskListDto) {
@@ -35,7 +31,6 @@ public class TaskListMapperImpl implements TaskListMapper {
                         ).orElse(null),
                 null,
                 null
-
         );
     }
 

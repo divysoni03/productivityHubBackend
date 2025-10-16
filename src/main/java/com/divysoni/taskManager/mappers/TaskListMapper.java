@@ -1,7 +1,7 @@
 package com.divysoni.taskManager.mappers;
 
 import com.divysoni.taskManager.dto.TaskListDto;
-import com.divysoni.taskManager.entities.TaskList;
+import com.divysoni.taskManager.entities.taskManager.TaskList;
 
 public interface TaskListMapper {
 
