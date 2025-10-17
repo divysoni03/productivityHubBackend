@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.divysoni</groupId>
-	<artifactId>taskManager</artifactId>
+	<artifactId>productivityHubBackend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>taskManager</name>
-	<description>Demo project for Spring Boot</description>
+	<name>ProductivityHub</name>
+	<description>Dive into productivity with productivityHub</description>
 	<url/>
 	<licenses>
 		<license/>
