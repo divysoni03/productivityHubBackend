@@ -1,5 +1,6 @@
 package com.divysoni.productivityHub.services.impl;
 
+import com.divysoni.productivityHub.entities.habits.HabitStorage;
 import com.divysoni.productivityHub.entities.users.User;
 import com.divysoni.productivityHub.repo.user.UserRepo;
 import com.divysoni.productivityHub.services.UserService;
@@ -7,6 +8,7 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
@@ -17,16 +19,24 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepo userRepo;
     private final PasswordEncoder passwordEncoder;
+    private final HabitStorageServiceImpl habitStorageService;
 
-    public UserServiceImpl(UserRepo userRepo, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepo userRepo, PasswordEncoder passwordEncoder, HabitStorageServiceImpl habitStorageService) {
         this.userRepo = userRepo;
         this.passwordEncoder = passwordEncoder;
+        this.habitStorageService = habitStorageService;
     }
 
+    @Transactional
     @Override
     public User saveNewUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRoles(Arrays.asList("USER"));
+
+        HabitStorage habitStorage = new HabitStorage();
+        HabitStorage savedHabitStorage = habitStorageService.saveHabitStorage(habitStorage);
+
+        user.setHabitStorage(savedHabitStorage);
         return userRepo.save(user);
     }
     @Override

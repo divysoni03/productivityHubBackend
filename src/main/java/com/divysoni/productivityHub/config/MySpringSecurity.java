@@ -53,6 +53,7 @@ public class MySpringSecurity {
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/public/**").permitAll()
                         .requestMatchers("/task_lists/**").authenticated()
+                        .requestMatchers("/habit/**").authenticated()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().permitAll());
 

@@ -1,5 +1,7 @@
 package com.divysoni.productivityHub.entities.users;
 
+import com.divysoni.productivityHub.entities.habits.Habit;
+import com.divysoni.productivityHub.entities.habits.HabitStorage;
 import com.divysoni.productivityHub.entities.taskManager.TaskList;
 import lombok.*;
 import org.bson.types.ObjectId;
@@ -31,5 +33,9 @@ public class User {
 
     @DBRef
     private List<TaskList> taskLists =  new ArrayList<>();
+
+    @DBRef
+    private HabitStorage habitStorage;
+
     private List<String> roles;
 }

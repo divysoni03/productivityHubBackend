@@ -15,6 +15,7 @@ public class UserMapperImpl implements UserMapper {
                 userDto.email(),
                 false,
                 userDto.taskLists(),
+                null,
                 null
         );
     }
