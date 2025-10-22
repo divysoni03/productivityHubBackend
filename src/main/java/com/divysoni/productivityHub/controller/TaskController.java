@@ -2,7 +2,7 @@ package com.divysoni.productivityHub.controller;
 
 import com.divysoni.productivityHub.dto.CustomResponse;
 import com.divysoni.productivityHub.dto.ResponseBuilder;
-import com.divysoni.productivityHub.dto.TaskDto;
+import com.divysoni.productivityHub.dto.taskManager.TaskDto;
 import com.divysoni.productivityHub.mappers.impl.TaskMapperImpl;
 import com.divysoni.productivityHub.services.impl.TaskServiceImpl;
 import org.bson.types.ObjectId;

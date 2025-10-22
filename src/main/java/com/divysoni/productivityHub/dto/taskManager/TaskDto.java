@@ -1,4 +1,4 @@
-package com.divysoni.productivityHub.dto;
+package com.divysoni.productivityHub.dto.taskManager;
 
 import com.divysoni.productivityHub.entities.taskManager.TaskPriority;
 import com.divysoni.productivityHub.entities.taskManager.TaskStatus;

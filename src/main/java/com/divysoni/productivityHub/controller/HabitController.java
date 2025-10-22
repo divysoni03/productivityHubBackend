@@ -1,9 +1,13 @@
 package com.divysoni.productivityHub.controller;
 
-import com.divysoni.productivityHub.entities.habits.ActivityLog;
+import com.divysoni.productivityHub.dto.CustomResponse;
+import com.divysoni.productivityHub.dto.ResponseBuilder;
+import com.divysoni.productivityHub.dto.habit.HabitDto;
 import com.divysoni.productivityHub.entities.habits.Habit;
+import com.divysoni.productivityHub.mappers.impl.HabitStorageMapperImpl;
 import com.divysoni.productivityHub.services.impl.HabitStorageServiceImpl;
 import org.bson.types.ObjectId;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,20 +16,22 @@ import java.util.Map;
 @RestController
 @RequestMapping("/habit")
 public class HabitController {
-    public final HabitStorageServiceImpl habitStorageService;
+    private final HabitStorageServiceImpl habitStorageService;
+    private final HabitStorageMapperImpl habitMapper;
 
-    public HabitController(HabitStorageServiceImpl habitStorageService) {
+    public HabitController(HabitStorageServiceImpl habitStorageService, HabitStorageMapperImpl habitMapper) {
         this.habitStorageService = habitStorageService;
+        this.habitMapper = habitMapper;
     }
 
     @PostMapping
-    public Habit saveNewHabit(@RequestParam String title) {
-        return habitStorageService.addHabit(title);
+    public ResponseEntity<CustomResponse<HabitDto>> saveNewHabit(@RequestParam String title) {
+        return ResponseBuilder.success("Habit saved Successfully!", habitMapper.toDto(habitStorageService.addHabit(title)));
     }
 
     @GetMapping
-    public List<Habit> getAllHabits(){
-        return habitStorageService.getAllHabits();
+    public ResponseEntity<CustomResponse<List<HabitDto>>> getAllHabits(){
+        return ResponseBuilder.success("Habits Fetched Successfully!", habitStorageService.getAllHabits().stream().map(habitMapper::toDto).toList());
     }
 
     @DeleteMapping("/{habit_id}")
@@ -34,13 +40,13 @@ public class HabitController {
     }
 
     @PatchMapping("/{habit_id}")
-    public Habit updateHabitById(@PathVariable("habit_id") ObjectId id){
-        return habitStorageService.updateHabitStatus(id);
+    public ResponseEntity<CustomResponse<Habit>> updateHabitStatus(@PathVariable("habit_id") ObjectId id){
+        return ResponseBuilder.success("Habit Status updated!", habitStorageService.updateHabitStatus(id));
     }
 
     @GetMapping("/getAnalysis")
-    public Map<String, Object> getAnalysis(@RequestParam int days) {
-        return habitStorageService.getLastDaysData(days);
+    public ResponseEntity<CustomResponse<Map<String, Object>>> getAnalysis(@RequestParam int days) {
+        return ResponseBuilder.success("Activity for " + days + "fetched!", habitStorageService.getLastDaysData(days));
     }
 
 }

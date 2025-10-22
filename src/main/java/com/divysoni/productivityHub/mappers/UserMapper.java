@@ -1,6 +1,6 @@
 package com.divysoni.productivityHub.mappers;
 
-import com.divysoni.productivityHub.dto.UserDto;
+import com.divysoni.productivityHub.dto.user.UserDto;
 import com.divysoni.productivityHub.entities.users.User;
 
 public interface UserMapper {

@@ -1,5 +1,6 @@
-package com.divysoni.productivityHub.dto;
+package com.divysoni.productivityHub.dto.user;
 
+import com.divysoni.productivityHub.dto.habit.HabitStorageDto;
 import com.divysoni.productivityHub.entities.taskManager.TaskList;
 
 import java.util.List;
@@ -9,5 +10,6 @@ public record UserDto(
         String userName,
         String password,
         String email,
-        List<TaskList> taskLists
+        List<TaskList> taskLists,
+        HabitStorageDto habitStorageDto
 ) {}

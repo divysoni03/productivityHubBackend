@@ -1,4 +1,4 @@
-package com.divysoni.productivityHub.dto;
+package com.divysoni.productivityHub.dto.taskManager;
 
 import java.util.List;
 

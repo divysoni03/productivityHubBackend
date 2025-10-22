@@ -1,6 +1,6 @@
 package com.divysoni.productivityHub.mappers;
 
-import com.divysoni.productivityHub.dto.TaskDto;
+import com.divysoni.productivityHub.dto.taskManager.TaskDto;
 import com.divysoni.productivityHub.entities.taskManager.Task;
 
 public interface TaskMapper {

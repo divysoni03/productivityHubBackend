@@ -32,7 +32,7 @@ public class UserController {
     }
 
     @PutMapping
-    public ResponseEntity<User> editUser(@RequestBody User newUser) {
+    public ResponseEntity<CustomResponse<User>> editUser(@RequestBody User newUser) {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String userName = authentication.getName();
@@ -50,11 +50,11 @@ public class UserController {
                 }
 
                 userService.saveNewUser(oldUser); // This will encrypt the password because the new user's pass is not encrypted yet
-                return new ResponseEntity<>(oldUser, HttpStatus.OK);
+                return ResponseBuilder.success("User Details updated Successfully!", null);
             }
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseBuilder.failure(HttpStatus.NOT_FOUND, "Unable to find the User.");
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseBuilder.failure(HttpStatus.NOT_FOUND, "Unable to find the User.");
         }
     }
 
@@ -67,9 +67,9 @@ public class UserController {
             User oldUser = userService.findByUserName(userName);
             if(oldUser != null) {
                 userService.deleteById(oldUser.getId());
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+                return ResponseBuilder.success("Deleted User Successfully!", null);
             }
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseBuilder.failure(HttpStatus.NOT_FOUND, "Unable to find the User.");
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseBuilder.failure(HttpStatus.NOT_FOUND, "UserName Not Found!");
