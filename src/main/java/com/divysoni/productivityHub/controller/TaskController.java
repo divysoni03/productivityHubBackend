@@ -48,6 +48,12 @@ public class TaskController {
         return ResponseBuilder.success("Task Updated Successfully!", response);
     }
 
+    @PatchMapping("/{task_id}/update")
+    public ResponseEntity<CustomResponse<TaskDto>> updateTagsOfTask(@PathVariable("task_list_id") ObjectId taskListId, @PathVariable("task_id") ObjectId taskId, @RequestParam String tags) {
+        TaskDto response = taskMapper.toDto(taskService.updateTagsOfTask(taskListId, taskId, tags));
+        return ResponseBuilder.success("Tag Added successfully!", response);
+    }
+
     @DeleteMapping("/{task_id}")
     public ResponseEntity<CustomResponse<Object>> deleteTaskById(@PathVariable("task_list_id") ObjectId taskListId, @PathVariable("task_id") ObjectId taskId) {
         taskService.deleteTask(taskListId, taskId);

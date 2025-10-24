@@ -12,4 +12,5 @@ public interface TaskService {
     Task getTaskById(ObjectId taskListId, ObjectId taskId);
     Task updateTask(ObjectId taskListId, ObjectId taskId, Task newTask);
     void deleteTask(ObjectId taskListId, ObjectId taskId);
+    Task updateTagsOfTask(ObjectId taskListId, ObjectId taskId, String Tags);
 }

@@ -110,4 +110,15 @@ public class TaskServiceImpl implements TaskService {
         taskList.getTasks().remove(task);
         taskListService.saveTaskList(taskList); /// 2
     }
+
+    @Override
+    public Task updateTagsOfTask(ObjectId taskListId, ObjectId taskId, String tags) {
+        TaskList taskList = taskListService.getTaskList(taskListId);
+        List<Task> collected = taskList.getTasks().stream().filter(task->task.getId().equals(taskId)).toList();
+        if(collected.isEmpty()) throw new IllegalArgumentException("Invalid Task Id!");
+        Task task = collected.get(0);
+
+        task.setTags(tags);
+        return taskRepo.save(task); /// 1
+    }
 }

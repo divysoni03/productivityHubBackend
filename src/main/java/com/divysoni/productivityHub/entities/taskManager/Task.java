@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Document(collection = "tasks")
 @Data
@@ -30,4 +31,6 @@ public class Task {
     private LocalDateTime created;
 
     private LocalDateTime updated;
+
+    private String tags;
 }
