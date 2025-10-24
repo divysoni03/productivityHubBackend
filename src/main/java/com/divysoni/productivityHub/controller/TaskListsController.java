@@ -1,7 +1,7 @@
 package com.divysoni.productivityHub.controller;
 
-import com.divysoni.productivityHub.dto.CustomResponse;
-import com.divysoni.productivityHub.dto.ResponseBuilder;
+import com.divysoni.productivityHub.dto.misc.CustomResponse;
+import com.divysoni.productivityHub.dto.misc.ResponseBuilder;
 import com.divysoni.productivityHub.dto.taskManager.TaskListDto;
 import com.divysoni.productivityHub.mappers.impl.TaskListMapperImpl;
 import com.divysoni.productivityHub.services.impl.TaskListServiceImpl;

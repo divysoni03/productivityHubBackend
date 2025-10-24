@@ -2,6 +2,7 @@ package com.divysoni.productivityHub.entities.users;
 
 import com.divysoni.productivityHub.entities.habits.Habit;
 import com.divysoni.productivityHub.entities.habits.HabitStorage;
+import com.divysoni.productivityHub.entities.misc.Request;
 import com.divysoni.productivityHub.entities.taskManager.TaskList;
 import lombok.*;
 import org.bson.types.ObjectId;
@@ -38,4 +39,7 @@ public class User {
     private HabitStorage habitStorage;
 
     private List<String> roles;
+
+    @DBRef
+    private List<Request> requests = new ArrayList<>();
 }

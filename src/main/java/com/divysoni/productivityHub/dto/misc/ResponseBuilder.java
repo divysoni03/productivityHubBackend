@@ -1,4 +1,4 @@
-package com.divysoni.productivityHub.dto;
+package com.divysoni.productivityHub.dto.misc;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

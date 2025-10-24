@@ -1,6 +1,6 @@
 package com.divysoni.productivityHub.controller;
 
-import com.divysoni.productivityHub.dto.ErrorResponse;
+import com.divysoni.productivityHub.dto.misc.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

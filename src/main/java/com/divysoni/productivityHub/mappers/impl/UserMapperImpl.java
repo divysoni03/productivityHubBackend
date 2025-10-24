@@ -25,7 +25,8 @@ public class UserMapperImpl implements UserMapper {
                 false,
                 userDto.taskLists(),
                 null,
-                null
+                null,
+                userDto.requests()
         );
     }
 
@@ -37,7 +38,8 @@ public class UserMapperImpl implements UserMapper {
                 user.getPassword(),
                 user.getEmail(),
                 user.getTaskLists(),
-                habitMapper.toDto(user.getHabitStorage())
+                habitMapper.toDto(user.getHabitStorage()),
+                user.getRequests()
         );
     }
 }
