@@ -3,6 +3,7 @@ package com.divysoni.productivityHub.mappers.impl;
 import com.divysoni.productivityHub.dto.taskManager.TaskListDto;
 import com.divysoni.productivityHub.entities.taskManager.Task;
 import com.divysoni.productivityHub.entities.taskManager.TaskList;
+import com.divysoni.productivityHub.entities.taskManager.TaskListCategory;
 import com.divysoni.productivityHub.entities.taskManager.TaskStatus;
 import com.divysoni.productivityHub.mappers.TaskListMapper;
 import org.bson.types.ObjectId;
@@ -32,7 +33,8 @@ public class TaskListMapperImpl implements TaskListMapper {
                                 .toList()
                         ).orElse(null),
                 null,
-                null
+                null,
+                TaskListCategory.PERSONAL
         );
     }
 
@@ -48,7 +50,8 @@ public class TaskListMapperImpl implements TaskListMapper {
                 calculateTaskListProgress(taskList.getTasks()),
                 Optional.ofNullable(taskList.getTasks())
                         .map(tasks -> tasks.stream().map(taskMapper::toDto).toList())
-                        .orElse(null)
+                        .orElse(null),
+                taskList.getCategory()
         );
     }
 

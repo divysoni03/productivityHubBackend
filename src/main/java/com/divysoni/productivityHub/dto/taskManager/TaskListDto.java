@@ -1,5 +1,7 @@
 package com.divysoni.productivityHub.dto.taskManager;
 
+import com.divysoni.productivityHub.entities.taskManager.TaskListCategory;
+
 import java.util.List;
 
 public record TaskListDto(
@@ -8,5 +10,6 @@ public record TaskListDto(
         String description,
         Integer count,
         Double progress,
-        List<TaskDto> tasks
+        List<TaskDto> tasks,
+        TaskListCategory category
 ) {}

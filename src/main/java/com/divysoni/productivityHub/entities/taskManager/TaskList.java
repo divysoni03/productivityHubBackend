@@ -29,4 +29,6 @@ public class TaskList {
     private LocalDateTime created;
 
     private LocalDateTime updated;
+
+    private TaskListCategory category;
 }

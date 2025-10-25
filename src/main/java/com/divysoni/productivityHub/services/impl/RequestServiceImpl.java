@@ -1,7 +1,9 @@
 package com.divysoni.productivityHub.services.impl;
 
 import com.divysoni.productivityHub.entities.misc.Request;
+import com.divysoni.productivityHub.entities.taskManager.Task;
 import com.divysoni.productivityHub.entities.taskManager.TaskList;
+import com.divysoni.productivityHub.entities.taskManager.TaskListCategory;
 import com.divysoni.productivityHub.entities.users.User;
 import com.divysoni.productivityHub.repo.misc.RequestRepo;
 import com.divysoni.productivityHub.services.RequestService;
@@ -53,6 +55,8 @@ public class RequestServiceImpl implements RequestService {
             throw new IllegalArgumentException("Invalid userName, enter valid UserName!");
         }
         TaskList taskList = taskListService.getTaskList(taskListId);
+        taskList.setCategory(TaskListCategory.COLLABORATIVE);
+        taskListService.saveTaskList(taskList);
 
         LocalDateTime creationTime = LocalDateTime.now();
         LocalDateTime expirationTime = creationTime.plusDays(2);
