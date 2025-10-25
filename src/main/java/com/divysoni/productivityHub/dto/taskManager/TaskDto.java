@@ -3,7 +3,6 @@ package com.divysoni.productivityHub.dto.taskManager;
 import com.divysoni.productivityHub.entities.taskManager.TaskPriority;
 import com.divysoni.productivityHub.entities.taskManager.TaskStatus;
 import java.time.LocalDateTime;
-import java.util.List;
 
 /* DTO(data transfer object): which is just used to transfer object/ presentation object
 * ex., from frontend to server etc...
@@ -20,5 +19,5 @@ public record TaskDto(
         LocalDateTime dueDate,
         TaskPriority priority,
         TaskStatus status,
-        String tags
+        String category
 ){}

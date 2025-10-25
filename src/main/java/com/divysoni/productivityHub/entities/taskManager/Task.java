@@ -32,5 +32,5 @@ public class Task {
 
     private LocalDateTime updated;
 
-    private String tags;
+    private String category;
 }

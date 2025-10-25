@@ -5,7 +5,6 @@ import com.divysoni.productivityHub.entities.taskManager.Task;
 import com.divysoni.productivityHub.mappers.TaskMapper;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Component;
-import java.util.Collections;
 
 @Component
 public class TaskMapperImpl implements TaskMapper {
@@ -20,7 +19,7 @@ public class TaskMapperImpl implements TaskMapper {
                 taskDto.priority(),
                 null,
                 null,
-                taskDto.tags()!=null?taskDto.tags():"ALL"
+                taskDto.category()!=null?taskDto.category():"ALL"
         );
     }
 
@@ -33,7 +32,7 @@ public class TaskMapperImpl implements TaskMapper {
                 task.getDueDate(),
                 task.getPriority(),
                 task.getStatus(),
-                task.getTags()
+                task.getCategory()
         );
     }
 }

@@ -49,8 +49,8 @@ public class TaskController {
     }
 
     @PatchMapping("/{task_id}/update")
-    public ResponseEntity<CustomResponse<TaskDto>> updateTagsOfTask(@PathVariable("task_list_id") ObjectId taskListId, @PathVariable("task_id") ObjectId taskId, @RequestParam String tags) {
-        TaskDto response = taskMapper.toDto(taskService.updateTagsOfTask(taskListId, taskId, tags));
+    public ResponseEntity<CustomResponse<TaskDto>> updateTagsOfTask(@PathVariable("task_list_id") ObjectId taskListId, @PathVariable("task_id") ObjectId taskId, @RequestParam String category) {
+        TaskDto response = taskMapper.toDto(taskService.updateTagsOfTask(taskListId, taskId, category));
         return ResponseBuilder.success("Tag Added successfully!", response);
     }
 
