@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface RequestService {
     List<Request> getAllRequest();
-    Request makeNewRequest(ObjectId taskListId);
+    Request makeNewRequest(ObjectId taskListId, String receiverUserName);
     void deleteById(ObjectId requestId);
     void acceptRequest(ObjectId requestId);
 }

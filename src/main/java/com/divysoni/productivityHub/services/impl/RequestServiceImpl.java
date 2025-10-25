@@ -43,29 +43,34 @@ public class RequestServiceImpl implements RequestService {
 
     @Transactional
     @Override
-    public Request makeNewRequest(ObjectId taskListId) {
+    public Request makeNewRequest(ObjectId taskListId, String receiverUserName) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String userName = auth.getName();
-        User user = userService.findByUserName(userName);
+        String senderUserName = auth.getName();
+        User senderUser = userService.findByUserName(senderUserName);
 
+        User receiverUser = userService.findByUserName(receiverUserName);
+        if(receiverUser == null) {
+            throw new IllegalArgumentException("Invalid userName, enter valid UserName!");
+        }
         TaskList taskList = taskListService.getTaskList(taskListId);
 
         LocalDateTime creationTime = LocalDateTime.now();
         LocalDateTime expirationTime = creationTime.plusDays(2);
         Request newRequest = new Request(
-                null,
                 taskList,
-                user.getId(),
+                senderUser.getId(),
                 creationTime,
                 expirationTime
         );
-
         Request savedRequest = requestRepo.save(newRequest);
-        user.getRequests().add(savedRequest);
+
+        receiverUser.getRequests().add(savedRequest);
+        userService.saveUser(receiverUser);
 
         return savedRequest;
     }
 
+    @Transactional
     @Override
     public void deleteById(ObjectId requestId) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -78,6 +83,9 @@ public class RequestServiceImpl implements RequestService {
             throw new IllegalArgumentException("Invalid Id, enter valid Id");
         }
         requestRepo.deleteById(requestId);
+        user.getRequests().remove(collected.get(0));
+
+        userService.saveUser(user);
     }
 
     @Transactional

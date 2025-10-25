@@ -24,4 +24,11 @@ public class Request {
 
     private LocalDateTime created;
     private LocalDateTime expiration;
+
+    public Request(TaskList taskList, ObjectId senderId, LocalDateTime created, LocalDateTime expiration) {
+        this.taskList = taskList;
+        this.senderId = senderId;
+        this.created = created;
+        this.expiration = expiration;
+    }
 }
